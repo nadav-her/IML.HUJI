@@ -1,3 +1,4 @@
+import scipy.stats
 from plotnine import geom_point, theme_classic, ggtitle
 
 from IMLearn.learners import UnivariateGaussian, MultivariateGaussian
@@ -19,7 +20,7 @@ def test_univariate_gaussian():
     rand_data = np.random.normal(mu, sigma, size=1000)
     ug = UnivariateGaussian()
     ug.fit(rand_data)
-    print(ug.mu_, ug.var_)
+    print(np.round(ug.mu_, decimals=3), np.round(ug.var_, decimals=3))
 
     # Question 2 - Empirically showing sample mean is consistent
     ranges = np.arange(10, 1001, 10)
@@ -61,8 +62,9 @@ def test_multivariate_gaussian():
     rand_data = np.random.multivariate_normal(mu, sigma, size=1000)
     mg = MultivariateGaussian()
     mg.fit(rand_data)
-    print(mg.mu_)
-    print(mg.cov_)
+
+    print(np.round(mg.mu_, decimals=3))
+    print(np.round(mg.cov_, decimals=3))
 
     # Question 5 - Likelihood evaluation
     space = np.linspace(-10, 10, 200)
@@ -74,7 +76,7 @@ def test_multivariate_gaussian():
     values = np.apply_along_axis(f, 1, mu)
 
     df = pd.DataFrame({"f1": f1, "f3": f3, "LL value": values})
-    g5 = ggplot(df, aes("f1", "f3", fill=df["LL value"])) + geom_tile() + ggtitle(
+    g5 = ggplot(df, aes("f3", "f1", fill=df["LL value"])) + geom_tile() + ggtitle(
         "Heatmap of LL value with different f1 and f3") + theme_classic()
     ggsave(g5, "q5_heatmap.png", verbose=False)
     print(g5)
@@ -83,7 +85,8 @@ def test_multivariate_gaussian():
     max_idx = np.argmax(values)
     max_f1 = f1[max_idx]
     max_f3 = f3[max_idx]
-    print(max_f1, max_f3)
+    print(max(values))
+    print(np.round(max_f1, decimals=3), np.round(max_f3, decimals=3))
 
 
 if __name__ == '__main__':

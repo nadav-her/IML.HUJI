@@ -182,7 +182,7 @@ class MultivariateGaussian:
         if not self.fitted_:
             raise ValueError("Estimator must first be fitted before calling `pdf` function")
         m, d = X.shape
-        num = np.exp(((X - self.mu_).T @ inv(self.cov_) @ (X - self.mu_)) / -2)
+        num = np.exp(np.diagonal((X - self.mu_) @ inv(self.cov_) @ (X - self.mu_).T) / -2)
         den = np.sqrt(((2 * np.pi) ** d) * det(self.cov_))
         return num / den
 
@@ -211,5 +211,5 @@ class MultivariateGaussian:
         sign, logdet = slogdet(cov)
 
         b = -1 * m * (logdet * sign) / 2
-        c = -1 * np.sum((X - mu) @ inv(cov) @ (X - mu).T) / 2  # todo
+        c = -1 * np.sum(np.diagonal((X - mu) @ inv(cov) @ (X - mu).T)) / 2
         return a + b + c
