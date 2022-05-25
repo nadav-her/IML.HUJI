@@ -89,7 +89,7 @@ def fit_and_evaluate_adaboost(noise, n_learners=250, train_size=5000, test_size=
     pn.ggsave(g, f"../output/grid_plot_{noise}.png")
 
     # Question 3: Decision surface of best performing ensemble
-    min_err_idx = int(np.argmin(np.array([test_loss])))
+    min_err_idx = int(np.argmin(np.array([test_loss]))) + 1
     x, y, z = decision_surface(ada.partial_predict, lims[0], lims[1], min_err_idx, test_X)
     df_1 = pd.DataFrame({"x": x, "y": y, "z": z.astype(str), "type": min_err_idx})
     y_pred = ada.partial_predict(test_X, min_err_idx)
